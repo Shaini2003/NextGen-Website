@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, Globe, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, CheckCircle, Globe, MessageSquare, X } from 'lucide-react';
 
 const contactInfo = [
   {
     icon: <Mail className="w-6 h-6" />,
     title: 'Email',
-    content: 'contact@nextgen-solutions.com',
+    content: 'contact@nextgcodex.com',
     description: 'Send us an email anytime'
   },
   {
@@ -85,32 +85,125 @@ const ContactPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Function to generate WhatsApp message and open WhatsApp
+  const sendToWhatsApp = (data: typeof formData) => {
+    // Format the message with all form data
+    const message = `*New Contact Form Submission - NextGen CodeX*\n\n` +
+                   `*Name:* ${data.name}\n` +
+                   `*Email:* ${data.email}\n` +
+                   `*Company:* ${data.company || 'Not provided'}\n` +
+                   `*Phone:* ${data.phone || 'Not provided'}\n` +
+                   `*Service Interested In:* ${data.service || 'Not specified'}\n` +
+                   `*Project Budget:* ${data.budget || 'Not specified'}\n` +
+                   `*Project Timeline:* ${data.timeline || 'Not specified'}\n\n` +
+                   `*Project Details:*\n${data.message}\n\n` +
+                   `*Submitted via Website Form*`;
+    
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // WhatsApp URL with phone number and message
+    const whatsappUrl = `https://wa.me/94759627589?text=${encodedMessage}`;
+    
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, '_blank');
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({
-      name: '',
-      email: '',
-      company: '',
-      phone: '',
-      service: '',
-      budget: '',
-      timeline: '',
-      message: ''
-    });
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    try {
+      // Send to WhatsApp
+      const whatsappSuccess = sendToWhatsApp(formData);
+      
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setIsSubmitting(false);
+      
+      if (whatsappSuccess) {
+        // Show success message
+        setIsSubmitted(true);
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          service: '',
+          budget: '',
+          timeline: '',
+          message: ''
+        });
+
+        // Auto-hide success message after 6 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 6000);
+      }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setIsSubmitting(false);
+      // Even if there's an error, we'll show success since WhatsApp opened
+      setIsSubmitted(true);
+      
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 6000);
+    }
+  };
+
+  const closePopup = () => {
+    setIsSubmitted(false);
   };
 
   return (
     <div className="min-h-screen">
+      {/* Success Popup Modal */}
+      {isSubmitted && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-auto shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center">
+                <CheckCircle className="w-8 h-8 text-green-600 mr-3" />
+                <h3 className="text-xl font-bold text-gray-900">Success!</h3>
+              </div>
+              <button
+                onClick={closePopup}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <p className="text-gray-700 mb-6">
+              Your message has been prepared and WhatsApp is opening! Please check your browser for the WhatsApp tab. 
+              If WhatsApp didn't open automatically, please click send on the pre-filled message in your WhatsApp.
+            </p>
+            <div className="flex space-x-3">
+              <button
+                onClick={closePopup}
+                className="flex-1 bg-teal-600 text-white py-3 px-4 rounded-xl hover:bg-teal-700 transition-colors font-semibold"
+              >
+                OK
+              </button>
+              <a
+                href="https://wa.me/94759627589"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-green-600 text-white py-3 px-4 rounded-xl hover:bg-green-700 transition-colors font-semibold text-center"
+              >
+                Open WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="py-32 bg-gradient-to-br from-teal-900 via-cyan-800 to-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -123,15 +216,15 @@ const ContactPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
-              href="mailto:contact@nextgen-solutions.com"
-              className="btn-primary text-lg px-10 py-4 group"
+              href="mailto:contact@nextgcodex.com"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg px-10 py-4 group"
             >
               <Mail className="w-5 h-5 mr-2" />
               Send Email
             </a>
             <a
               href="tel:0759627589"
-              className="btn-secondary text-lg px-10 py-4 group"
+              className="inline-flex items-center justify-center bg-white text-gray-900 font-semibold rounded-xl border border-gray-300 hover:border-cyan-300 hover:text-cyan-700 transition-all duration-300 transform hover:scale-105 text-lg px-10 py-4 group"
             >
               <Phone className="w-5 h-5 mr-2" />
               Call Now
@@ -145,18 +238,16 @@ const ContactPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Contact Form */}
-            <div className="card p-10">
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-10">
               <div className="flex items-center mb-8">
                 <MessageSquare className="w-8 h-8 text-teal-600 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-900">Send us a message</h2>
+                <h2 className="text-3xl font-bold text-gray-900">Send us a message via WhatsApp</h2>
               </div>
 
-              {isSubmitted && (
-                <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
-                  <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-                  <span className="text-green-800">Thank you! Your message has been sent successfully.</span>
-                </div>
-              )}
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Fill out the form below and we'll open WhatsApp with your project details pre-filled. 
+                Just click "Send" in WhatsApp to contact us directly!
+              </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -218,7 +309,7 @@ const ContactPage = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors"
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="+94 759 627 589"
                     />
                   </div>
                 </div>
@@ -304,27 +395,34 @@ const ContactPage = () => {
                   className={`w-full flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 ${
                     isSubmitting
                       ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                      : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
                   }`}
                 >
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                      Sending...
+                      Preparing WhatsApp...
                     </>
                   ) : (
                     <>
-                      Send Message
-                      <Send className="w-5 h-5 ml-2" />
+                      <MessageSquare className="w-5 h-5 mr-2" />
+                      Open WhatsApp with Details
                     </>
                   )}
                 </button>
+
+                <div className="text-center">
+                  <p className="text-sm text-gray-500">
+                    <Phone className="w-4 h-4 inline mr-1" />
+                    We'll open WhatsApp with your details pre-filled to: <strong>0759627589</strong>
+                  </p>
+                </div>
               </form>
             </div>
 
             {/* Contact Information */}
             <div className="space-y-8">
-              <div className="card p-8">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8">
                 <div className="flex items-center mb-6">
                   <Globe className="w-8 h-8 text-teal-600 mr-3" />
                   <h2 className="text-2xl font-bold text-gray-900">Contact Information</h2>
@@ -348,10 +446,34 @@ const ContactPage = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* WhatsApp Direct Section */}
+                <div className="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
+                  <div className="flex items-center mb-3">
+                    <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mr-3">
+                      <MessageSquare className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Direct WhatsApp</h3>
+                  </div>
+                  <p className="text-gray-700 mb-4">
+                    Prefer to message us directly? Click below to start a conversation on WhatsApp:
+                  </p>
+                  <div className="text-center">
+                    <a
+                      href="https://wa.me/94759627589"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 transform hover:scale-105 px-6 py-3"
+                    >
+                      <MessageSquare className="w-5 h-5 mr-2" />
+                      Open WhatsApp Directly
+                    </a>
+                  </div>
+                </div>
               </div>
 
               {/* FAQ Section */}
-              <div className="card p-8">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
                 <div className="space-y-6">
                   {faqs.map((faq, index) => (
@@ -367,21 +489,27 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Map Section (Placeholder) */}
+      {/* Map Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold gradient-text mb-4">Visit Our Office</h2>
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4">Visit Our Office</h2>
             <p className="text-xl text-gray-600">Located in the heart of Galle, Sri Lanka</p>
           </div>
           
-          <div className="card overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
             <div className="h-96 bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
               <div className="text-center">
                 <MapPin className="w-16 h-16 text-teal-600 mx-auto mb-4" />
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">NextGen CodeX Office</h3>
                 <p className="text-gray-600">Galle, Sri Lanka</p>
-                <p className="text-sm text-gray-500 mt-2">Interactive map coming soon</p>
+                <p className="text-sm text-gray-500 mt-2">Your trusted software development partner</p>
+                <div className="mt-4">
+                  <p className="text-green-600 font-semibold">
+                    <MessageSquare className="w-4 h-4 inline mr-1" />
+                    WhatsApp: 0759627589
+                  </p>
+                </div>
               </div>
             </div>
           </div>
