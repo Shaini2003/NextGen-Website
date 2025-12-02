@@ -1,52 +1,60 @@
 import { Link } from 'react-router-dom';
-import { Users, Target, Award, Heart, Code, Globe, Smartphone, Cloud, CheckCircle, Linkedin, Twitter, Github } from 'lucide-react';
+import { Users, Target, Award, Heart, Code, Globe, Smartphone, Cloud, CheckCircle, Linkedin } from 'lucide-react';
 
 const team = [
-  {
-    name: 'Gangul Ranaweera',
-    role: 'CEO & Founder',
-    image: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
-    bio: 'Visionary leader with 10+ years in software development and business strategy.',
-    social: {
-      linkedin: 'https://linkedin.com/in/gangul-ranaweera', // Replace with actual URL
-      twitter: 'https://twitter.com/gangul', // Replace with actual URL
-      github: 'https://github.com/gangul', // Replace with actual URL
+
+    {
+      id: 1,
+      name: 'Gangul Ranaweera',
+      role: 'CEO & Founder',
+      image: 'images/g.png',
+      bio: 'Vision-driven founder with 2+ years of experience in software engineering, solution architecture, and business strategy. Leads innovation, project direction, and overall company growth.',
+      social: {
+        linkedin: 'https://www.linkedin.com/in/gangul-ranaweera-959325339/',
+      },
     },
-  },
-  {
-    name: 'Sarah Johnson',
-    role: 'CTO',
-    image: 'https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
-    bio: 'Technical expert specializing in scalable architecture and emerging technologies.',
-    social: {
-      linkedin: '/sarah-linkedin',
-      twitter: '/sarah-twitter',
-      github: '/sarah-github',
+    {
+      id: 2,
+      name: 'Tharindu Herath',
+      role: 'Co-Founder',
+      image: 'images/th.png',
+      bio: 'Tech-focused co-founder with strong expertise in backend engineering, cloud deployment, and scalable system architecture. Ensures high-performance, secure, and reliable development workflows.',
+      social: {
+        linkedin: 'https://www.linkedin.com/in/tharindu-herath-b648271bb/',
+      },
     },
-  },
-  {
-    name: 'Mike Chen',
-    role: 'Lead Developer',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
-    bio: 'Full-stack developer passionate about creating innovative solutions.',
-    social: {
-      linkedin: '/mike-linkedin',
-      twitter: '/mike-twitter',
-      github: '/mike-github',
+    {
+      id: 3,
+      name: 'Januli Tharinya',
+      role: 'Business Analyst',
+      image: 'images/ja.png',
+      bio: 'Detail-oriented Business Analyst skilled in requirement gathering, process mapping, UI/UX documentation, and transforming client needs into actionable development tasks.',
+      social: {
+        linkedin: 'https://www.linkedin.com/in/januli-tarinya-samaraweera-8bb4281b4',
+      },
     },
-  },
-  {
-    name: 'Emily Davis',
-    role: 'UI/UX Designer',
-    image: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop',
-    bio: 'Creative designer focused on user-centered design and exceptional experiences.',
-    social: {
-      linkedin: '/emily-linkedin',
-      twitter: '/emily-twitter',
-      github: '/emily-github',
+    {
+      id: 4,
+      name: 'Duvindu Nimsara',
+      role: 'UI/UX Designer',
+      image: 'images/d.png',
+      bio: 'Creative UI/UX Designer specializing in user-centered design, wireframing, prototyping, and crafting modern digital experiences that blend aesthetics with functionality.',
+      social: {
+        linkedin: 'https://www.linkedin.com/in/duvindu-nimsara/',
+      },
     },
-  },
-];
+    {
+      id: 5,
+      name: 'Sadeepa Nimsara',
+      role: 'AI / ML Engineer',
+      image: 'images/sadeepa.png',
+      bio: 'AI/ML engineer skilled in predictive modeling, computer vision, and data-driven automation. Focused on building intelligent solutions that enhance business performance.',
+      social: {
+        linkedin: 'https://www.linkedin.com/in/sadeepa-nimsara',
+      },
+    },
+  ];
+  
 
 const values = [
   {
@@ -228,12 +236,7 @@ const AboutPage = () => {
                   <Link to={member.social.linkedin} className="text-gray-600 hover:text-teal-600 transition-colors">
                     <Linkedin className="w-5 h-5" />
                   </Link>
-                  <Link to={member.social.twitter} className="text-gray-600 hover:text-teal-600 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </Link>
-                  <Link to={member.social.github} className="text-gray-600 hover:text-teal-600 transition-colors">
-                    <Github className="w-5 h-5" />
-                  </Link>
+                  
                 </div>
               </div>
             ))}
